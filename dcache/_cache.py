@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Callable, Optional, Union
 from functools import wraps, partial
 
-from ._utils import is_method
+from ._adaptor import auto_adapt_to_methods
 
 
 def dcache(
@@ -16,11 +16,9 @@ def dcache(
         path, str | Path, default=/tmp: The path of the directory where cache are stored
     """
 
+    @auto_adapt_to_methods
     def wrapper(func: Callable, *args, **kwargs):
-        if is_method(func):
-            result = func(self, *args, **kwargs)
-        else:
-            result = func(*args, **kwargs)
+        result = func(*args, **kwargs)
 
         return result
 
