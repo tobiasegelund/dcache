@@ -1,4 +1,4 @@
-from dcache._utils import find_tmp_directory
+# from dcache._utils import find_tmp_directory
 
 
 # def test_find_tmp_directory():
