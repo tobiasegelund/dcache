@@ -19,7 +19,8 @@ def dcache(
     The decorator hashes the input and maps the serialized output to hashed value on disk.
 
     params:
-        path, str|Path, default=/tmp: The path of the directory where cache are stored
+        path, str|Path, default=None: The path of the directory where cache are stored.
+            If None it uses the default tmp directory of the operating system
         expiration_time, int, default=None: The expiration time in seconds
         save_hash_values_in_memory, bool, default=False:
     """
@@ -49,3 +50,9 @@ def dcache(
         return wraps(func)(partial(wrapper, func))
 
     return wrap_callable
+
+
+def clear_dcache(path: Optional[Union[str, Path]] = None):
+    # TODO: Create a clear cache
+    # Add a prefix to indicate dcache saved files
+    cache_dir = find_tmp_directory() if path is None else path

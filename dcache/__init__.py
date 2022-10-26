@@ -1,1 +1,1 @@
-from ._cache import dcache
+from ._cache import dcache, clear_dcache
