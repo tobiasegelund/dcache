@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dcache"
+version = "0.1.0"
+authors = [
+  {name="Tobias Egelund", email="egelundtobias@gmail.com" },
+]
+description = "A library to log input and output of machine learning systems"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["logging", "machine learning", "dataframe"]
+classifiers = [
+  "Topic :: System :: Cache",
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "joblib",
+    "pandas",
+    'python_version>="3.8"',
+]
+
+[project.urls]
+"Homepage" = "https://github.com/tobiasegelund/dcache"
+"Bug Tracker" = "https://github.com/tobiasegelund/dcache/issues"
