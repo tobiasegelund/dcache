@@ -9,7 +9,7 @@ def save_df(filename: str, file: pd.DataFrame) -> None:
 
 
 def load_df(filename: str) -> pd.DataFrame:
-    return pd.read_parquet(filename)
+    return pd.read_parquet(filename + ".parquet")
 
 
 def save_to_file(filename: str, file: Any) -> None:
@@ -21,13 +21,12 @@ def save_to_file(filename: str, file: Any) -> None:
         pickle.dump(f, file)
 
 
-def load_File(filename: str) -> Any:
-    extension = filename.split(".")[-1]
+def load_file(filename: str, extension: str) -> Any:
     if extension == "parquet":
         df = load_df(filename=filename)
         return df
 
-    with open(filename, "rb") as f:
+    with open(filename + ".pkl", "rb") as f:
         file = pickle.load(f)
 
     return file

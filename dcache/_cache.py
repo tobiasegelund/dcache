@@ -4,8 +4,8 @@ from functools import wraps, partial
 
 from ._adaptor import auto_adapt_to_methods
 from ._os import find_tmp_directory, convert_str_to_path
-
-# from ._utils import
+from ._utils import hash_input
+from ._fs import load_file, save_to_file
 
 
 def dcache(
@@ -30,12 +30,19 @@ def dcache(
 
     @auto_adapt_to_methods
     def wrapper(func: Callable, *args, **kwargs):
-        # TODO:
-        # 1. Create hash value
-        # 2. Lookup hash value in directory
-        # 3. Load data or run func
+        result = None
+        hash_value = hash_input(func=func, *args, **kwargs)
 
-        result = func(*args, **kwargs)
+        for file in cache_dir.glob("dcache_*"):
+            file = str(file).split("/")[-1]
+            file = file.split(".")
+            filename, extension = file
+            if filename == hash_value:
+                result = load_file(filename=filename, extension=extension)
+
+        if result is None:
+            result = func(*args, **kwargs)
+            save_to_file(filename=hash_value, file=result)
 
         return result
 
