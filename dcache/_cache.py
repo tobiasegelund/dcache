@@ -53,6 +53,7 @@ def dcache(
 
 
 def clear_dcache(path: Optional[Union[str, Path]] = None):
-    # TODO: Create a clear cache
-    # Add a prefix to indicate dcache saved files
     cache_dir = find_tmp_directory() if path is None else path
+
+    for file in cache_dir.glob("dcache_*"):
+        file.unlink()

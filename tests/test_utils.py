@@ -1,7 +1,7 @@
-# from dcache._utils import find_tmp_directory
+from dcache._utils import prefix_filename
 
 
-# def test_find_tmp_directory():
-#     path = find_tmp_directory()
+def test_prefix_filename():
+    new_name = prefix_filename(filename="name", prefix="dcache_")
 
-#     assert str(path) == "/tmp"
+    assert new_name == "dcache_name"

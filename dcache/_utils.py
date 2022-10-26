@@ -1,15 +1,10 @@
-import inspect
 import hashlib
 from io import StringIO, BytesIO
 from typing import Callable, Optional
 
 
-def is_method(func: Callable):
-    spec = inspect.signature(func)
-    if len(spec.parameters) > 0:
-        if list(spec.parameters.keys())[0] in ("cls", "self"):
-            return True
-    return False
+def prefix_filename(filename: str, prefix: str = "dcache_") -> str:
+    return prefix + filename
 
 
 def hash_string(name: str, length: Optional[int] = None) -> str:
