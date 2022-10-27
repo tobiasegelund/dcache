@@ -12,7 +12,7 @@ from ._exceptions import NothingToReturn, FileExpired
 def dcache(
     func: Optional[Callable] = None,
     *,
-    path: Optional[Union[str, Path]] = None,
+    cache_dir: Optional[Union[str, Path]] = None,
     expiration_time: Optional[int] = None,
 ) -> Callable:
     """Cache output to disk
@@ -20,12 +20,12 @@ def dcache(
     The decorator hashes the input and maps the serialized output to hashed value on disk.
 
     params:
-        path, str|Path, default=None: The path of the directory where cache are stored.
+        cache_dir, str|Path, default=None: The path of the directory where cache are stored.
             If None it uses the default tmp directory of the operating system
         expiration_time, int, default=None: The expiration time in minutes
     """
 
-    cache_dir = find_tmp_directory() if path is None else path
+    cache_dir = find_tmp_directory() if cache_dir is None else cache_dir
 
     if not isinstance(cache_dir, Path):
         cache_dir = convert_str_to_path(cache_dir)
