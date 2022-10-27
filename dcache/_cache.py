@@ -4,13 +4,14 @@ from functools import wraps, partial
 
 from ._adaptor import auto_adapt_to_methods
 from ._os import find_tmp_directory, convert_str_to_path
-from ._utils import hash_input, prefix_filename
+from ._utils import hash_input, prefix_filename, ismethod
 from ._fs import load_file, save_to_file
 from ._exceptions import NothingToReturn
 
 
 def dcache(
     func: Optional[Callable] = None,
+    *,
     path: Optional[Union[str, Path]] = None,
     expiration_time: Optional[int] = None,
 ) -> Callable:

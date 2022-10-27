@@ -4,6 +4,12 @@ from typing import Callable, Optional
 import joblib
 
 
+def ismethod(func: Callable) -> bool:
+    if func.__name__ != func.__qualname__:
+        return True
+    return False
+
+
 def prefix_filename(filename: str, prefix: str = "dcache_") -> str:
     return prefix + filename
 
