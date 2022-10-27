@@ -5,8 +5,8 @@ from functools import wraps, partial
 from ._adaptor import auto_adapt_to_methods
 from ._os import find_tmp_directory, convert_str_to_path
 from ._utils import hash_input, prefix_filename, ismethod
-from ._fs import load_file, save_to_file
-from ._exceptions import NothingToReturn
+from ._fs import look_up_file_in_cache, save_to_file
+from ._exceptions import NothingToReturn, FileExpired
 
 
 def dcache(
@@ -22,7 +22,7 @@ def dcache(
     params:
         path, str|Path, default=None: The path of the directory where cache are stored.
             If None it uses the default tmp directory of the operating system
-        expiration_time, int, default=None: The expiration time in seconds
+        expiration_time, int, default=None: The expiration time in minutes
     """
 
     cache_dir = find_tmp_directory() if path is None else path
@@ -30,6 +30,7 @@ def dcache(
     if not isinstance(cache_dir, Path):
         cache_dir = convert_str_to_path(cache_dir)
 
+    # TODO: Fix logic to handle methods as well without comprising decorator call with or without ()
     # @auto_adapt_to_methods
     def wrapper(func: Callable, *args, **kwargs):
         result = None
@@ -38,12 +39,14 @@ def dcache(
 
         # TODO: Split the moves up here into fewer funcs and use exceptions to try/catch
 
-        for file in cache_dir.glob("dcache_*"):
-            _file = str(file).split("/")[-1]
-            _file = _file.split(".")
-            filename, extension = _file
-            if filename == hash_value_with_prefix:
-                result = load_file(filename=file, extension=extension)
+        try:
+            result = look_up_file_in_cache(
+                cache_dir=cache_dir,
+                hash_value_with_prefix=hash_value_with_prefix,
+                expiration_time=expiration_time,
+            )
+        except (FileNotFoundError, FileExpired):
+            pass
 
         if result is None:
             result = func(*args, **kwargs)
