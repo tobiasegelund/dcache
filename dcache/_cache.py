@@ -4,8 +4,9 @@ from functools import wraps, partial
 
 from ._adaptor import auto_adapt_to_methods
 from ._os import find_tmp_directory, convert_str_to_path
-from ._utils import hash_input
+from ._utils import hash_input, prefix_filename
 from ._fs import load_file, save_to_file
+from ._exceptions import NothingToReturn
 
 
 def dcache(
@@ -28,21 +29,30 @@ def dcache(
     if not isinstance(cache_dir, Path):
         cache_dir = convert_str_to_path(cache_dir)
 
-    @auto_adapt_to_methods
+    # @auto_adapt_to_methods
     def wrapper(func: Callable, *args, **kwargs):
         result = None
-        hash_value = hash_input(func=func, *args, **kwargs)
+        hash_value = hash_input(func=func.__qualname__, *args, **kwargs)
+        hash_value_with_prefix = prefix_filename(filename=hash_value)
+
+        # TODO: Split the moves up here into fewer funcs and use exceptions to try/catch
 
         for file in cache_dir.glob("dcache_*"):
-            file = str(file).split("/")[-1]
-            file = file.split(".")
-            filename, extension = file
-            if filename == hash_value:
-                result = load_file(filename=filename, extension=extension)
+            _file = str(file).split("/")[-1]
+            _file = _file.split(".")
+            filename, extension = _file
+            if filename == hash_value_with_prefix:
+                result = load_file(filename=file, extension=extension)
 
         if result is None:
             result = func(*args, **kwargs)
-            save_to_file(filename=hash_value, file=result)
+
+            if result is None:
+                raise NothingToReturn(f"{func} doesn't return anything")
+
+            save_to_file(
+                filename=cache_dir.joinpath(hash_value_with_prefix), data=result
+            )
 
         return result
 

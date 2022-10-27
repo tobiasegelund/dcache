@@ -4,3 +4,7 @@ class PathDoesNotExists(Exception):
 
 class FileExpired(Exception):
     pass
+
+
+class NothingToReturn(Exception):
+    pass

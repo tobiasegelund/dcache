@@ -1,4 +1,6 @@
+import pytest
 from dcache import dcache
+from dcache._exceptions import NothingToReturn
 
 
 def test_method_with_parenthesis():
@@ -7,7 +9,8 @@ def test_method_with_parenthesis():
         def test_method(self):
             pass
 
-    TestMethod().test_method()
+    with pytest.raises(NothingToReturn) as exc_info:
+        TestMethod().test_method()
 
 
 def test_method_without_parenthesis():
@@ -16,7 +19,8 @@ def test_method_without_parenthesis():
         def test_method(self):
             pass
 
-    TestMethod().test_method()
+    with pytest.raises(NothingToReturn) as exc_info:
+        TestMethod().test_method()
 
 
 def test_func_without_parenthesis():
@@ -24,7 +28,8 @@ def test_func_without_parenthesis():
     def test_func():
         pass
 
-    test_func()
+    with pytest.raises(NothingToReturn) as exc_info:
+        test_func()
 
 
 def test_func_with_parenthesis():
@@ -32,4 +37,5 @@ def test_func_with_parenthesis():
     def test_func():
         pass
 
-    test_func()
+    with pytest.raises(NothingToReturn) as exc_info:
+        test_func()

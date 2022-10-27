@@ -1,3 +1,4 @@
+import pytest
 from dcache._utils import prefix_filename, hash_input
 
 
