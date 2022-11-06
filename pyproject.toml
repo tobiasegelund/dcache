@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dcache"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   {name="Tobias Egelund", email="egelundtobias@gmail.com" },
 ]
@@ -21,6 +21,7 @@ dependencies = [
     "joblib",
     "pandas",
     'python_version>="3.8"',
+    'pyarrow'
 ]
 
 [project.urls]
