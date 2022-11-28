@@ -1,11 +1,11 @@
 # dcache
 A cache program to store cache of slow functions on disk. It takes advantage of the of the decorator design pattern to easily implement on functions. As default, the program cache items to /tmp directory with the option to change to a different directory.
 
-The program hashes the input and the function itself to control if any changes happens to the input a new output must be generated. For example, the function is highly relevant to use on functions using SQL queries as the SQL query itself (as string) will be hashed.
- to easily implement on functions
-Notice, the program offers the options to specify the directory to store cache, as well as the expiration time of cached items.
+The program hashes the input and the function itself to control if any changes happens to the input a new output must be generated. For example, the function is highly relevant to use on functions using SQL queries since the SQL query will be hashed.
 
-Currently, the program does not support methods but only functions. Though, the feature will be included soon.
+Notice, the program offers the options to specify the directory to store cache, as well as the expiration time of cached items (in minutes).
+
+Currently, the program does not support methods but only functions.
 
 ## Installation
 To install the library use the following command
