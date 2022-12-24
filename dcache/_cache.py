@@ -5,7 +5,7 @@ from functools import wraps, partial
 from ._adaptor import auto_adapt_to_methods
 from ._os import find_tmp_directory, convert_str_to_path
 from ._utils import hash_input, prefix_filename, ismethod
-from ._fs import look_up_file_in_cache, save_to_file
+from ._fs import scan_cache, save_to_file
 from ._exceptions import NothingToReturn, FileExpired
 
 
@@ -35,14 +35,14 @@ def dcache(
     def wrapper(func: Callable, *args, **kwargs):
         result = None
         hash_value = hash_input(func=func.__qualname__, *args, **kwargs)
-        hash_value_with_prefix = prefix_filename(filename=hash_value)
+        hash_with_prefix = prefix_filename(filename=hash_value)
 
         # TODO: Split the moves up here into fewer funcs and use exceptions to try/catch
 
         try:
-            result = look_up_file_in_cache(
+            result = scan_cache(
                 cache_dir=cache_dir,
-                hash_value_with_prefix=hash_value_with_prefix,
+                hash_with_prefix=hash_with_prefix,
                 expiration_time=expiration_time,
             )
         except (FileNotFoundError, FileExpired):
@@ -55,7 +55,7 @@ def dcache(
                 raise NothingToReturn(f"{func} doesn't return anything")
 
             save_to_file(
-                filename=cache_dir.joinpath(hash_value_with_prefix), data=result
+                filename=cache_dir.joinpath(hash_with_prefix), data=result
             )
 
         return result

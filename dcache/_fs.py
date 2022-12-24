@@ -36,26 +36,26 @@ def load_file(filename: Path, extension: str) -> Any:
     return data
 
 
-def look_up_file_in_cache(
-    cache_dir: Path, hash_value_with_prefix: str, expiration_time: Optional[int]
+def scan_cache(
+    cache_dir: Path, hash_with_prefix: str, expiration_time: Optional[int]
 ) -> Any:
     for file in cache_dir.glob("dcache_*"):
         _file = str(file).split("/")[-1]
         _file = _file.split(".")
         filename, extension = _file
-        if filename == hash_value_with_prefix:
-            result = load_file(filename=file, extension=extension)
+        if filename == hash_with_prefix:
 
             if expiration_time is not None:
-                alive_seconds = (
+                last_minute_seconds = (
                     datetime.datetime.now()
                     - datetime.datetime.fromtimestamp(file.stat().st_mtime)
                 ).seconds
-                alive_minutes = int(alive_seconds / 60)
+                last_modified_minutes = int(last_minute_seconds / 60)
                 evalute_expiration_time(
-                    current_time=alive_minutes, expiration_time=expiration_time
+                    current_time=last_modified_minutes, expiration_time=expiration_time
                 )
 
+            result = load_file(filename=file, extension=extension)
             return result
 
     raise FileNotFoundError()

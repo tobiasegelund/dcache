@@ -1,5 +1,5 @@
 # dcache
-A cache program to store cache of slow functions on disk. It takes advantage of the of the decorator design pattern to easily implement on functions. As default, the program cache items to /tmp directory with the option to change to a different directory.
+A cache program to store output of slow functions on disk. It takes advantage of the of the decorator design pattern to easily implement on functions. As default, the program cache items to /tmp directory with the option to change to a different directory.
 
 The program hashes the input and the function itself to control if any changes happens to the input a new output must be generated. For example, the function is highly relevant to use on functions using SQL queries since the SQL query will be hashed.
 
